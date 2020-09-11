@@ -2,7 +2,7 @@ FROM golang:1.15.2-alpine3.12
 
 RUN apk add git
 
-RUN go get ./...
+RUN go build
 
 RUN mkdir -p /go/src/stock-portfolio-api
 
