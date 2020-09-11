@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  app:
+    container_name: web_api
+    hostname: web_api
+    restart: on-failure:3
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+    - "80:80"
