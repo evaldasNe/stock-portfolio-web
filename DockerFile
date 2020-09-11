@@ -8,7 +8,7 @@ WORKDIR /go/src/stock-portfolio-api
 
 COPY . /go/src/stock-portfolio-api
 
-RUN go build
+RUN go get ./...
 
 RUN go install stock-portfolio-api
 
