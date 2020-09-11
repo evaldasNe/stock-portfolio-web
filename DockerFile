@@ -1,0 +1,13 @@
+FROM golang:1.15.2-alpine3.12
+
+RUN mkdir -p /go/src/stock-portfolio-api
+
+WORKDIR /go/src/stock-portfolio-api
+
+COPY . /go/src/stock-portfolio-api
+
+RUN go install stock-portfolio-api
+
+CMD ["/go/bin/stock-portfolio-api"]
+
+EXPOSE 80
