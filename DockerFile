@@ -8,6 +8,8 @@ WORKDIR /go/src/stock-portfolio-web
 
 COPY . /go/src/stock-portfolio-web
 
+COPY . /usr/local/go/src/stock-portfolio-web
+
 RUN go get ./...
 
 RUN go install stock-portfolio-web
