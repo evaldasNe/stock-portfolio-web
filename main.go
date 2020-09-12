@@ -28,6 +28,6 @@ func main() {
 			"users": users,
 		})
 	})
-	autotls.Run(router, "http://ec2-3-22-241-112.us-east-2.compute.amazonaws.com")
+	autotls.Run(router, "ec2-3-22-241-112.us-east-2.compute.amazonaws.com")
 	//router.Run(":80")
 }
