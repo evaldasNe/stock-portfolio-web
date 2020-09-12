@@ -2,16 +2,16 @@ FROM golang:1.15.2-alpine3.12
 
 RUN apk add git
 
-RUN mkdir -p /go/src/stock-portfolio-api
+RUN mkdir -p /go/src/stock-portfolio-web
 
-WORKDIR /go/src/stock-portfolio-api
+WORKDIR /go/src/stock-portfolio-web
 
-COPY . /go/src/stock-portfolio-api
+COPY . /go/src/stock-portfolio-web
 
 RUN go get ./...
 
-RUN go install stock-portfolio-api
+RUN go install stock-portfolio-web
 
-CMD ["/go/bin/stock-portfolio-api"]
+CMD ["/go/bin/stock-portfolio-web"]
 
 EXPOSE 8080
