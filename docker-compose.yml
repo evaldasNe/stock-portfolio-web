@@ -1,17 +1,5 @@
 version: '3.8'
 services:
-  app:
-    container_name: web_api
-    hostname: web_api
-    restart: on-failure:3
-    build:
-      context: .
-      dockerfile: DockerFile
-    ports:
-    - "8080:8080"
-    links:
-      - "db:database"
-      
   db:
     container_name: web_db
     hostname: web_db
@@ -24,3 +12,15 @@ services:
     - "3306:3306"
     volumes:
     - ../db_setup.sql:/docker-entrypoint-initdb.d/setup.sql
+    
+  app:
+    container_name: web_api
+    hostname: web_api
+    restart: on-failure:3
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+    - "8080:8080"
+    links:
+      - "db:database"
