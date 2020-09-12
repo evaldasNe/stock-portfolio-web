@@ -1,7 +1,7 @@
 package Routes
 
 import (
-	"stock-portfolio-web/Controllers"
+	"github.com/evaldasNe/stock-portfolio-web/Controllers"
 
 	"github.com/gin-gonic/gin"
 )

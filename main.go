@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
-	"stock-portfolio-web/Config"
-	"stock-portfolio-web/Models"
-	"stock-portfolio-web/Routes"
+
+	"github.com/evaldasNe/stock-portfolio-web/Config"
+	"github.com/evaldasNe/stock-portfolio-web/Models"
+	"github.com/evaldasNe/stock-portfolio-web/Routes"
 
 	"github.com/jinzhu/gorm"
 )

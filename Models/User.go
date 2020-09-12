@@ -2,7 +2,8 @@ package Models
 
 import (
 	"fmt"
-	"stock-portfolio-web/Config"
+
+	"github.com/evaldasNe/stock-portfolio-web/Config"
 
 	_ "github.com/go-sql-driver/mysql"
 )

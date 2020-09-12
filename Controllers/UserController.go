@@ -3,7 +3,8 @@ package Controllers
 import (
 	"fmt"
 	"net/http"
-	"stock-portfolio-web/Models"
+
+	"github.com/evaldasNe/stock-portfolio-web/Models"
 
 	"github.com/gin-gonic/gin"
 )
