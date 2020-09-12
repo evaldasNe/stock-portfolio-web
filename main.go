@@ -1,31 +1,25 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"fmt"
+	"os"
+	"stock-portfolio-web/Config"
+	"stock-portfolio-web/Models"
+	"stock-portfolio-web/Routes"
+
+	"github.com/jinzhu/gorm"
 )
 
-// Person struct
-type Person struct {
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-}
+var err error
 
 func main() {
-	router := gin.Default()
-
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, "Hello World!")
-	})
-
-	router.GET("/test", func(c *gin.Context) {
-		users := make([]Person, 3)
-		users[0] = Person{Name: "Bill", Age: 44}
-		users[1] = Person{Name: "Jon", Age: 16}
-		users[2] = Person{Name: "Joe", Age: 66}
-
-		c.JSON(200, gin.H{
-			"users": users,
-		})
-	})
-	router.Run(":8080")
+	Config.DB, err = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	if err != nil {
+		fmt.Println("Status:", err)
+	}
+	defer Config.DB.Close()
+	Config.DB.AutoMigrate(&Models.User{})
+	r := Routes.SetupRouter()
+	//running
+	r.Run(":" + os.Getenv("APP_PORT"))
 }
