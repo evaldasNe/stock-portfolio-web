@@ -13,6 +13,8 @@ services:
       - "db:database"
       
   db:
+    container_name: web_db
+    hostname: web_db
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
