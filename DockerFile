@@ -14,4 +14,4 @@ RUN go install stock-portfolio-api
 
 CMD ["/go/bin/stock-portfolio-api"]
 
-EXPOSE 8080
+EXPOSE 80

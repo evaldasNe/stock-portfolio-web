@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,6 +27,5 @@ func main() {
 			"users": users,
 		})
 	})
-	autotls.Run(router, "ec2-3-22-241-112.us-east-2.compute.amazonaws.com")
-	//router.Run(":80")
+	router.Run(":80")
 }
