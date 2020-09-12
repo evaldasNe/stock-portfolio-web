@@ -12,6 +12,11 @@ services:
     - "3306:3306"
     volumes:
     - ../db_setup.sql:/docker-entrypoint-initdb.d/setup.sql
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:3306"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
     
   app:
     container_name: web_api
@@ -25,4 +30,5 @@ services:
     links:
       - "db:database"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
