@@ -9,7 +9,9 @@ services:
       dockerfile: DockerFile
     ports:
     - "8080:8080"
-
+    links:
+      - "db:database"
+      
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
