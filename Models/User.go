@@ -2,15 +2,29 @@ package Models
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/evaldasNe/stock-portfolio-web/Config"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-//GetAllUsers Fetch all user data
-func GetAllUsers(user *[]User) (err error) {
-	if err = Config.DB.Find(user).Error; err != nil {
+// User model struct
+type User struct {
+	ID          uint         `json:"id"`
+	Email       string       `gorm:"unique;not null" json:"email"`
+	FirstName   string       `gorm:"not null;size:50" json:"first_name"`
+	LastName    string       `gorm:"not null;size:50" json:"last_name"`
+	Phone       string       `json:"phone"`
+	Address     string       `json:"address"`
+	OwnedStocks []OwnedStock `json:"owned_stocks"`
+	CreatedAt   time.Time    `json:"created_at"`
+	UpdatedAt   time.Time    `json:"updated_at"`
+}
+
+//GetAllUsers Fetch all users data
+func GetAllUsers(users *[]User) (err error) {
+	if err = Config.DB.Find(users).Error; err != nil {
 		return err
 	}
 	return nil
@@ -27,6 +41,9 @@ func CreateUser(user *User) (err error) {
 //GetUserByID ... Fetch only one user by Id
 func GetUserByID(user *User, id string) (err error) {
 	if err = Config.DB.Where("id = ?", id).First(user).Error; err != nil {
+		return err
+	}
+	if err = Config.DB.Model(user).Association("OwnedStocks").Error; err != nil {
 		return err
 	}
 	return nil
