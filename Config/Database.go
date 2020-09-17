@@ -8,7 +8,7 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB

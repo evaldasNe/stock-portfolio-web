@@ -72,7 +72,7 @@ func DeleteUser(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"user_id": id,
-			"message": "User is deleted",
+			"message": "User has been deleted",
 		})
 	}
 }

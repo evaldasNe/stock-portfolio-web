@@ -11,17 +11,18 @@ import (
 	"github.com/evaldasNe/stock-portfolio-web/Routes"
 	"github.com/piquette/finance-go/quote"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var err error
 
 func main() {
-	Config.DB, err = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	dsn := Config.DbURL(Config.BuildDBConfig())
+	Config.DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println("Status:", err)
 	}
-	defer Config.DB.Close()
 	Config.DB.AutoMigrate(&Models.User{})
 	Config.DB.AutoMigrate(&Models.Stock{})
 	Config.DB.AutoMigrate(&Models.OwnedStock{})

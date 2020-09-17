@@ -5,8 +5,6 @@ import (
 	"time"
 
 	"github.com/evaldasNe/stock-portfolio-web/Config"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 // User model struct
@@ -24,7 +22,7 @@ type User struct {
 
 //GetAllUsers Fetch all users data
 func GetAllUsers(users *[]User) (err error) {
-	if err = Config.DB.Find(users).Error; err != nil {
+	if err = Config.DB.Preload("OwnedStocks").Find(users).Error; err != nil {
 		return err
 	}
 	return nil
@@ -40,10 +38,7 @@ func CreateUser(user *User) (err error) {
 
 //GetUserByID ... Fetch only one user by Id
 func GetUserByID(user *User, id string) (err error) {
-	if err = Config.DB.Where("id = ?", id).First(user).Error; err != nil {
-		return err
-	}
-	if err = Config.DB.Model(user).Association("OwnedStocks").Error; err != nil {
+	if err = Config.DB.Preload("OwnedStocks").Where("id = ?", id).First(user).Error; err != nil {
 		return err
 	}
 	return nil

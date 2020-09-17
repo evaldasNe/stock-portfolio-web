@@ -5,8 +5,6 @@ import (
 	"time"
 
 	"github.com/evaldasNe/stock-portfolio-web/Config"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 // Stock model struct
@@ -22,7 +20,7 @@ type Stock struct {
 
 //GetAllStocks Fetch all stocks data
 func GetAllStocks(stocks *[]Stock) (err error) {
-	if err = Config.DB.Find(stocks).Error; err != nil {
+	if err = Config.DB.Preload("OwnedBy").Find(stocks).Error; err != nil {
 		return err
 	}
 	return nil
@@ -38,7 +36,7 @@ func CreateStock(stock *Stock) (err error) {
 
 //GetStockByID ... Fetch only one stock by ID
 func GetStockByID(stock *Stock, id string) (err error) {
-	if err = Config.DB.Where("id = ?", id).First(stock).Error; err != nil {
+	if err = Config.DB.Preload("OwnedBy").Where("id = ?", id).First(stock).Error; err != nil {
 		return err
 	}
 	return nil
