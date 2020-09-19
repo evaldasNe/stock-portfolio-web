@@ -16,6 +16,8 @@ func SetupRouter() *gin.Engine {
 		grp1.GET("user/:id", Controllers.GetUserByID)
 		grp1.PUT("user/:id", Controllers.UpdateUser)
 		grp1.DELETE("user/:id", Controllers.DeleteUser)
+		grp1.GET("user/:id/soldStocks", Controllers.GetAllStocksUserSold)
+		grp1.GET("user/:id/profit", Controllers.GetUserProfit)
 
 		grp1.GET("stock", Controllers.GetStocks)
 		grp1.POST("stock", Controllers.CreateStock)
@@ -28,6 +30,12 @@ func SetupRouter() *gin.Engine {
 		grp1.GET("ownedStock/:id", Controllers.GetOwnedStockByID)
 		grp1.PUT("ownedStock/:id", Controllers.UpdateOwnedStock)
 		grp1.DELETE("ownedStock/:id", Controllers.DeleteOwnedStock)
+
+		grp1.GET("comment", Controllers.GetComments)
+		grp1.POST("comment", Controllers.CreateComment)
+		grp1.GET("comment/:id", Controllers.GetCommentByID)
+		grp1.PUT("comment/:id", Controllers.UpdateComment)
+		grp1.DELETE("comment/:id", Controllers.DeleteComment)
 	}
 	return r
 }

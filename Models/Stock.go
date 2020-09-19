@@ -9,18 +9,17 @@ import (
 
 // Stock model struct
 type Stock struct {
-	ID           uint         `json:"id"`
-	Ticker       string       `gorm:"unique;not null" json:"ticker"`
-	CompanyName  string       `gorm:"not null" json:"company_name"`
-	SellingPrice float64      `gorm:"not null" json:"selling_price"`
-	OwnedBy      []OwnedStock `json:"owned_by"`
-	CreatedAt    time.Time    `json:"created_at"`
-	UpdatedAt    time.Time    `json:"updated_at"`
+	ID           uint      `json:"id"`
+	Ticker       string    `gorm:"unique;not null" json:"ticker"`
+	CompanyName  string    `gorm:"not null" json:"company_name"`
+	SellingPrice float64   `gorm:"not null" json:"selling_price"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 //GetAllStocks Fetch all stocks data
 func GetAllStocks(stocks *[]Stock) (err error) {
-	if err = Config.DB.Preload("OwnedBy").Find(stocks).Error; err != nil {
+	if err = Config.DB.Find(stocks).Error; err != nil {
 		return err
 	}
 	return nil
@@ -36,7 +35,7 @@ func CreateStock(stock *Stock) (err error) {
 
 //GetStockByID ... Fetch only one stock by ID
 func GetStockByID(stock *Stock, id string) (err error) {
-	if err = Config.DB.Preload("OwnedBy").Where("id = ?", id).First(stock).Error; err != nil {
+	if err = Config.DB.Where("id = ?", id).First(stock).Error; err != nil {
 		return err
 	}
 	return nil

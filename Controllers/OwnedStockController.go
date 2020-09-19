@@ -54,7 +54,7 @@ func UpdateOwnedStock(c *gin.Context) {
 		c.JSON(http.StatusNotFound, ownedStock)
 	}
 	c.BindJSON(&ownedStock)
-	err = Models.UpdateOwnedStock(&ownedStock, id)
+	err = Models.UpdateOwnedStock(&ownedStock)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -73,6 +73,32 @@ func DeleteOwnedStock(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"user_id": id,
 			"message": "OwnedStock has been deleted",
+		})
+	}
+}
+
+//GetAllStocksUserSold ... Get stocks user sold
+func GetAllStocksUserSold(c *gin.Context) {
+	userID := c.Params.ByName("id")
+	var soldStocks []Models.OwnedStock
+	err := Models.GetAllStocksUserSold(&soldStocks, userID)
+	if err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+	} else {
+		c.JSON(http.StatusOK, soldStocks)
+	}
+}
+
+//GetUserProfit ... Get user profit
+func GetUserProfit(c *gin.Context) {
+	userID := c.Params.ByName("id")
+	var profit float64
+	err := Models.GetUserProfit(&profit, userID)
+	if err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"user_profit": profit,
 		})
 	}
 }

@@ -26,6 +26,7 @@ func main() {
 	Config.DB.AutoMigrate(&Models.User{})
 	Config.DB.AutoMigrate(&Models.Stock{})
 	Config.DB.AutoMigrate(&Models.OwnedStock{})
+	Config.DB.AutoMigrate(&Models.Comment{})
 
 	//addStocksToDB()
 

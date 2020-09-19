@@ -5,24 +5,28 @@ import (
 	"time"
 
 	"github.com/evaldasNe/stock-portfolio-web/Config"
+	"gorm.io/gorm/clause"
 )
 
 // User model struct
 type User struct {
-	ID          uint         `json:"id"`
-	Email       string       `gorm:"unique;not null" json:"email"`
-	FirstName   string       `gorm:"not null;size:50" json:"first_name"`
-	LastName    string       `gorm:"not null;size:50" json:"last_name"`
-	Phone       string       `json:"phone"`
-	Address     string       `json:"address"`
-	OwnedStocks []OwnedStock `json:"owned_stocks"`
-	CreatedAt   time.Time    `json:"created_at"`
-	UpdatedAt   time.Time    `json:"updated_at"`
+	ID               uint         `json:"id"`
+	Email            string       `gorm:"unique;not null" json:"email"`
+	FirstName        string       `gorm:"not null;size:50" json:"first_name"`
+	LastName         string       `gorm:"not null;size:50" json:"last_name"`
+	Phone            string       `json:"phone"`
+	Address          string       `json:"address"`
+	Blocked          bool         `gorm:"not null;default:false" json:"blocked"`
+	OwnedStocks      []OwnedStock `json:"owned_stocks"`
+	AuthorOfComments []Comment    `gorm:"foreignKey:AuthorID" json:"author_of_comments"`
+	ReceivedComments []Comment    `gorm:"foreignKey:ReceiverID" json:"received_comments"`
+	CreatedAt        time.Time    `json:"created_at"`
+	UpdatedAt        time.Time    `json:"updated_at"`
 }
 
 //GetAllUsers Fetch all users data
 func GetAllUsers(users *[]User) (err error) {
-	if err = Config.DB.Preload("OwnedStocks").Find(users).Error; err != nil {
+	if err = Config.DB.Preload(clause.Associations).Find(users).Error; err != nil {
 		return err
 	}
 	return nil
@@ -38,7 +42,7 @@ func CreateUser(user *User) (err error) {
 
 //GetUserByID ... Fetch only one user by Id
 func GetUserByID(user *User, id string) (err error) {
-	if err = Config.DB.Preload("OwnedStocks").Where("id = ?", id).First(user).Error; err != nil {
+	if err = Config.DB.Preload(clause.Associations).Where("id = ?", id).First(user).Error; err != nil {
 		return err
 	}
 	return nil
