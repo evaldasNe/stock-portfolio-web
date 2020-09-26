@@ -60,3 +60,11 @@ func DeleteUser(user *User, id string) (err error) {
 	Config.DB.Where("id = ?", id).Delete(user)
 	return nil
 }
+
+//GetUserByEmail ... Get User id
+func GetUserByEmail(user *User, email string) (err error) {
+	if err = Config.DB.Where("email = ?", email).First(user).Error; err != nil {
+		return err
+	}
+	return nil
+}

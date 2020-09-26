@@ -2,6 +2,9 @@ package Routes
 
 import (
 	"github.com/evaldasNe/stock-portfolio-web/Controllers"
+	"github.com/evaldasNe/stock-portfolio-web/Middlewares"
+	"github.com/evaldasNe/stock-portfolio-web/Services"
+	ginsession "github.com/go-session/gin-session"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +12,18 @@ import (
 //SetupRouter ... Configure routes
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+
+	r.Use(ginsession.New())
+
+	auth := r.Group("/auth")
+	Services.InitGoogleAuth()
+	{
+		auth.GET("/googleLogin", Services.HandleGoogleLogin)
+		auth.GET("/callback", Services.HandleGoogleCallback)
+	}
+
 	grp1 := r.Group("/api")
+	grp1.Use(Middlewares.AuthMiddleware())
 	{
 		grp1.GET("user", Controllers.GetUsers)
 		grp1.POST("user", Controllers.CreateUser)
