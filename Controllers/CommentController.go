@@ -29,7 +29,7 @@ func CreateComment(c *gin.Context) {
 		fmt.Println(err.Error())
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, comment)
+		c.JSON(http.StatusCreated, comment)
 	}
 }
 

@@ -13,7 +13,9 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/piquette/finance-go v1.0.0
 	github.com/shopspring/decimal v1.2.0 // indirect
+	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/ugorji/go v1.1.8 // indirect
+	golang.org/x/net v0.0.0-20200927032502-5d4f70055728 // indirect
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
 	golang.org/x/sys v0.0.0-20200926100807-9d91bd62050c // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect

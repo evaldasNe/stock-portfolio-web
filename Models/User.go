@@ -14,8 +14,6 @@ type User struct {
 	Email            string       `gorm:"unique;not null" json:"email"`
 	FirstName        string       `gorm:"not null;size:50" json:"first_name"`
 	LastName         string       `gorm:"not null;size:50" json:"last_name"`
-	Phone            string       `json:"phone"`
-	Address          string       `json:"address"`
 	Blocked          bool         `gorm:"not null;default:false" json:"blocked"`
 	OwnedStocks      []OwnedStock `json:"owned_stocks"`
 	AuthorOfComments []Comment    `gorm:"foreignKey:AuthorID" json:"author_of_comments"`
@@ -64,6 +62,14 @@ func DeleteUser(user *User, id string) (err error) {
 //GetUserByEmail ... Get User id
 func GetUserByEmail(user *User, email string) (err error) {
 	if err = Config.DB.Where("email = ?", email).First(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+//GetOrCreateUser ... Get or create new user
+func GetOrCreateUser(user *User, userToLookFor User) (err error) {
+	if err = Config.DB.FirstOrCreate(&user, userToLookFor).Error; err != nil {
 		return err
 	}
 	return nil

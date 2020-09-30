@@ -70,10 +70,11 @@ func HandleGoogleCallback(c *gin.Context) {
 	}
 
 	var user Models.User
-	if err = Models.GetUserByEmail(&user, data["email"].(string)); err != nil {
+	userToLookFor := Models.User{Email: data["email"].(string), FirstName: data["given_name"].(string), LastName: data["family_name"].(string)}
+	if err = Models.GetOrCreateUser(&user, userToLookFor); err != nil {
 		fmt.Println(err.Error())
 		c.JSON(http.StatusNotFound, gin.H{
-			"message": "User " + err.Error(),
+			"message": err.Error(),
 		})
 		return
 	}

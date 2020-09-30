@@ -29,7 +29,7 @@ func CreateUser(c *gin.Context) {
 		fmt.Println(err.Error())
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, user)
+		c.JSON(http.StatusCreated, user)
 	}
 }
 

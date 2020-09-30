@@ -41,7 +41,7 @@ func CreateStock(c *gin.Context) {
 		fmt.Println(err.Error())
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, stock)
+		c.JSON(http.StatusCreated, stock)
 	}
 }
 
