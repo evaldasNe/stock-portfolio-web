@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/evaldasNe/stock-portfolio-web/Middlewares"
 	"github.com/evaldasNe/stock-portfolio-web/Models"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,12 @@ func GetComments(c *gin.Context) {
 func CreateComment(c *gin.Context) {
 	var comment Models.Comment
 	c.BindJSON(&comment)
+
+	if comment.AuthorID != c.MustGet("authUserID").(uint) {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
 	err := Models.CreateComment(&comment)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -53,6 +60,12 @@ func UpdateComment(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusNotFound, comment)
 	}
+
+	if !Middlewares.IsTheSameUserOrIsAdmin(comment.AuthorID, c.MustGet("authUserID").(uint)) {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
 	c.BindJSON(&comment)
 	err = Models.UpdateComment(&comment)
 	if err != nil {
@@ -66,7 +79,19 @@ func UpdateComment(c *gin.Context) {
 func DeleteComment(c *gin.Context) {
 	var comment Models.Comment
 	id := c.Params.ByName("id")
-	err := Models.DeleteComment(&comment, id)
+
+	err := Models.GetCommentByID(&comment, id)
+	if err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	if !Middlewares.IsTheSameUserOrIsAdmin(comment.AuthorID, c.MustGet("authUserID").(uint)) {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	err = Models.DeleteComment(&comment)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/evaldasNe/stock-portfolio-web/Middlewares"
+
 	"github.com/evaldasNe/stock-portfolio-web/Models"
 
 	"github.com/gin-gonic/gin"
@@ -36,6 +38,12 @@ func GetOwnedStockByID(c *gin.Context) {
 func CreateOwnedStock(c *gin.Context) {
 	var ownedStock Models.OwnedStock
 	c.BindJSON(&ownedStock)
+
+	if ownedStock.UserID != c.MustGet("authUserID").(uint) {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
 	err := Models.CreateOwnedStock(&ownedStock)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -53,6 +61,12 @@ func UpdateOwnedStock(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusNotFound, ownedStock)
 	}
+
+	if !Middlewares.IsTheSameUserOrIsAdmin(ownedStock.UserID, c.MustGet("authUserID").(uint)) {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
 	c.BindJSON(&ownedStock)
 	err = Models.UpdateOwnedStock(&ownedStock)
 	if err != nil {
@@ -66,7 +80,19 @@ func UpdateOwnedStock(c *gin.Context) {
 func DeleteOwnedStock(c *gin.Context) {
 	var ownedStock Models.OwnedStock
 	id := c.Params.ByName("id")
-	err := Models.DeleteOwnedStock(&ownedStock, id)
+
+	err := Models.GetOwnedStockByID(&ownedStock, id)
+	if err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	if !Middlewares.IsTheSameUserOrIsAdmin(ownedStock.UserID, c.MustGet("authUserID").(uint)) {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	err = Models.DeleteOwnedStock(&ownedStock)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {

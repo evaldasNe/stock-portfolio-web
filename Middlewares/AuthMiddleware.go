@@ -50,8 +50,10 @@ func AuthMiddleware() gin.HandlerFunc {
 					}
 					c.AbortWithStatusJSON(http.StatusResetContent, userToken.Token)
 				}
-
 			}
+
+			c.Set("authUserID", userToken.UserID)
+
 		} else {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}

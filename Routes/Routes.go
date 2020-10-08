@@ -24,27 +24,37 @@ func SetupRouter() *gin.Engine {
 
 	grp1 := r.Group("/api")
 	grp1.Use(Middlewares.AuthMiddleware())
+
+	usersG := grp1.Group("/users")
+	usersG.Use(Middlewares.UserRestriction())
+
+	onlyForAdmin := grp1.Group("/")
+	onlyForAdmin.Use(Middlewares.OnlyForAdmin())
 	{
-		grp1.GET("users", Controllers.GetUsers)
-		grp1.POST("users", Controllers.CreateUser)
-		grp1.GET("users/:id", Controllers.GetUserByID)
-		grp1.PATCH("users/:id", Controllers.UpdateUser)
-		grp1.DELETE("users/:id", Controllers.DeleteUser)
-		grp1.GET("users/:id/soldStocks", Controllers.GetAllStocksUserSold)
-		grp1.GET("users/:id/profit", Controllers.GetUserProfit)
+		// /api/users
+		usersG.GET("/", Controllers.GetUsers)
+		usersG.POST("/", Controllers.CreateUser)
+		usersG.GET("/:id", Controllers.GetUserByID)
+		usersG.PATCH("/:id", Controllers.UpdateUser)
+		usersG.DELETE("/:id", Controllers.DeleteUser)
+		usersG.GET("/:id/soldStocks", Controllers.GetAllStocksUserSold)
+		usersG.GET("/:id/profit", Controllers.GetUserProfit)
 
+		// /api
 		grp1.GET("stocks", Controllers.GetStocks)
-		grp1.POST("stocks", Controllers.CreateStock)
+		onlyForAdmin.POST("stocks", Controllers.CreateStock)
 		grp1.GET("stocks/:id", Controllers.GetStockByID)
-		grp1.PATCH("stocks/:id", Controllers.UpdateStock)
-		grp1.DELETE("stocks/:id", Controllers.DeleteStock)
+		onlyForAdmin.PATCH("stocks/:id", Controllers.UpdateStock)
+		onlyForAdmin.DELETE("stocks/:id", Controllers.DeleteStock)
 
+		// /api
 		grp1.GET("ownedStocks", Controllers.GetOwnedStocks)
 		grp1.POST("ownedStocks", Controllers.CreateOwnedStock)
 		grp1.GET("ownedStocks/:id", Controllers.GetOwnedStockByID)
 		grp1.PATCH("ownedStocks/:id", Controllers.UpdateOwnedStock)
 		grp1.DELETE("ownedStocks/:id", Controllers.DeleteOwnedStock)
 
+		// /api
 		grp1.GET("comments", Controllers.GetComments)
 		grp1.POST("comments", Controllers.CreateComment)
 		grp1.GET("comments/:id", Controllers.GetCommentByID)

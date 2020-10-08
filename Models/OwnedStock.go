@@ -52,8 +52,8 @@ func UpdateOwnedStock(ownedStock *OwnedStock) (err error) {
 }
 
 //DeleteOwnedStock ... Delete Owned Stock
-func DeleteOwnedStock(ownedStock *OwnedStock, id string) (err error) {
-	Config.DB.Where("id = ?", id).Delete(ownedStock)
+func DeleteOwnedStock(ownedStock *OwnedStock) (err error) {
+	Config.DB.Delete(ownedStock)
 	return nil
 }
 

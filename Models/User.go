@@ -1,7 +1,6 @@
 package Models
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/evaldasNe/stock-portfolio-web/Config"
@@ -15,6 +14,7 @@ type User struct {
 	FirstName        string       `gorm:"not null;size:50" json:"first_name"`
 	LastName         string       `gorm:"not null;size:50" json:"last_name"`
 	Blocked          bool         `gorm:"not null;default:false" json:"blocked"`
+	Role             string       `gorm:"not null;default:USER" json:"role"`
 	OwnedStocks      []OwnedStock `json:"owned_stocks"`
 	AuthorOfComments []Comment    `gorm:"foreignKey:AuthorID" json:"author_of_comments"`
 	ReceivedComments []Comment    `gorm:"foreignKey:ReceiverID" json:"received_comments"`
@@ -48,7 +48,6 @@ func GetUserByID(user *User, id string) (err error) {
 
 //UpdateUser ... Update user
 func UpdateUser(user *User, id string) (err error) {
-	fmt.Println(user)
 	Config.DB.Save(user)
 	return nil
 }
@@ -70,6 +69,15 @@ func GetUserByEmail(user *User, email string) (err error) {
 //GetOrCreateUser ... Get or create new user
 func GetOrCreateUser(user *User, userToLookFor User) (err error) {
 	if err = Config.DB.FirstOrCreate(&user, userToLookFor).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// GetUserRoleByID ...
+func GetUserRoleByID(role *string, id uint) (err error) {
+	row := Config.DB.Table("users").Where("id = ?", id).Select("role").Row()
+	if err = row.Scan(role); err != nil {
 		return err
 	}
 	return nil

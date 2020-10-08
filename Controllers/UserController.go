@@ -53,7 +53,16 @@ func UpdateUser(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusNotFound, user)
 	}
+
+	originalUserRole := user.Role
+
 	c.BindJSON(&user)
+
+	if c.MustGet("authUserRole").(string) != "ADMIN" && originalUserRole != user.Role {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
 	err = Models.UpdateUser(&user, id)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)

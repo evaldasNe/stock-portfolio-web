@@ -9,8 +9,8 @@ import (
 // Comment model struct
 type Comment struct {
 	ID         uint      `json:"id"`
-	AuthorID   uint      `gorm:"not null" json:"author_id"`
-	ReceiverID uint      `gorm:"not null" json:"receiver_id"`
+	AuthorID   uint      `gorm:"not null;<-:create" json:"author_id"`
+	ReceiverID uint      `gorm:"not null;<-:create" json:"receiver_id"`
 	Text       string    `json:"text"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
@@ -47,7 +47,7 @@ func UpdateComment(comment *Comment) (err error) {
 }
 
 //DeleteComment ... Delete Comment
-func DeleteComment(comment *Comment, id string) (err error) {
-	Config.DB.Where("id = ?", id).Delete(comment)
+func DeleteComment(comment *Comment) (err error) {
+	Config.DB.Delete(comment)
 	return nil
 }
