@@ -1,9 +1,13 @@
 package Routes
 
 import (
+	"time"
+
 	"github.com/evaldasNe/stock-portfolio-web/Controllers"
 	"github.com/evaldasNe/stock-portfolio-web/Middlewares"
 	"github.com/evaldasNe/stock-portfolio-web/Services"
+	ginsession "github.com/go-session/gin-session"
+	cors "github.com/itsjamie/gin-cors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +16,7 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	/*r.Use(ginsession.New(), cors.Middleware(cors.Config{
+	r.Use(ginsession.New(), cors.Middleware(cors.Config{
 		Origins:         "*",
 		Methods:         "GET, PUT, PATCH, POST, DELETE",
 		RequestHeaders:  "*",
@@ -20,7 +24,7 @@ func SetupRouter() *gin.Engine {
 		MaxAge:          50 * time.Second,
 		Credentials:     true,
 		ValidateHeaders: false,
-	}))*/
+	}))
 
 	auth := r.Group("/auth")
 	Services.InitGoogleAuth()
