@@ -10,10 +10,10 @@ import (
 // OwnedStock model struct
 type OwnedStock struct {
 	ID             uint      `json:"id"`
-	AmountOfShares float64   `gorm:"not null;<-:create" json:"amount_of_shares"`
-	Price          float64   `gorm:"not null;<-:create" json:"price"`
-	StockID        uint      `gorm:"not null;<-:create" json:"stock_id"`
-	UserID         uint      `gorm:"not null;<-:create" json:"owner_id"`
+	AmountOfShares float64   `gorm:"not null;<-:create" json:"amount_of_shares" binding:"required"`
+	Price          float64   `gorm:"not null;<-:create" json:"price" binding:"required"`
+	StockID        uint      `gorm:"not null;<-:create" json:"stock_id" binding:"required"`
+	UserID         uint      `gorm:"not null;<-:create" json:"owner_id" binding:"required"`
 	Sold           bool      `grom:"not null;default:false" json:"is_sold"`
 	Profit         float64   `json:"profit"`
 	CreatedAt      time.Time `json:"created_at"`

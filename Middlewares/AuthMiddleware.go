@@ -48,7 +48,7 @@ func AuthMiddleware() gin.HandlerFunc {
 						})
 						return
 					}
-					c.AbortWithStatusJSON(http.StatusResetContent, userToken.Token)
+					c.AbortWithStatusJSON(http.StatusBadRequest, userToken.Token)
 				}
 			}
 

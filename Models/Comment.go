@@ -9,9 +9,9 @@ import (
 // Comment model struct
 type Comment struct {
 	ID         uint      `json:"id"`
-	AuthorID   uint      `gorm:"not null;<-:create" json:"author_id"`
-	ReceiverID uint      `gorm:"not null;<-:create" json:"receiver_id"`
-	Text       string    `json:"text"`
+	AuthorID   uint      `gorm:"not null;<-:create" json:"author_id" binding:"required"`
+	ReceiverID uint      `gorm:"not null;<-:create" json:"receiver_id" binding:"required"`
+	Text       string    `json:"text" binding:"required"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }

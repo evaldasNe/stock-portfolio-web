@@ -94,6 +94,71 @@ func HandleGoogleCallback(c *gin.Context) {
 	})
 }
 
+type user struct {
+	Email    string `json:"email"`
+	Name     string `json:"givenName"`
+	LastName string `json:"familyName"`
+}
+
+type tokenType struct {
+	AccessToken string `json:"access_token"`
+	TokenType   string `json:"token_type"`
+	Expiry      int64  `json:"expires_at"`
+}
+
+type postData struct {
+	User  user      `json:"user"`
+	Token tokenType `json:"token"`
+}
+
+// SaveGoogleToken ...
+func SaveGoogleToken(c *gin.Context) {
+	var user Models.User
+	var postedData postData
+
+	c.BindJSON(&postedData)
+	fmt.Println(postedData)
+
+	postUser := postedData.User
+
+	userToLookFor := Models.User{
+		Email:     postUser.Email,
+		FirstName: postUser.Name,
+		LastName:  postUser.LastName,
+	}
+
+	if err := Models.GetOrCreateUser(&user, userToLookFor); err != nil {
+		fmt.Println(err.Error())
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	token := postedData.Token
+
+	googleToken := oauth2.Token{
+		AccessToken: token.AccessToken,
+		TokenType:   token.TokenType,
+		Expiry:      time.Unix(token.Expiry/1000, 0),
+	}
+
+	newToken := Models.Token{Token: &googleToken, UserID: user.ID}
+
+	err := Models.CreateOrUpdateToken(&newToken)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"token":     token,
+		"my_id":     user.ID,
+		"user_role": user.Role,
+	})
+}
+
 // savedToken ...
 var savedToken *oauth2.Token
 

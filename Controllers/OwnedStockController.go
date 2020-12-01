@@ -37,7 +37,14 @@ func GetOwnedStockByID(c *gin.Context) {
 //CreateOwnedStock ... Create Owned Stock
 func CreateOwnedStock(c *gin.Context) {
 	var ownedStock Models.OwnedStock
-	c.BindJSON(&ownedStock)
+
+	if err := c.BindJSON(&ownedStock); err != nil {
+		c.AbortWithStatusJSON(
+			http.StatusBadRequest,
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
 
 	if ownedStock.UserID != c.MustGet("authUserID").(uint) {
 		c.AbortWithStatus(http.StatusForbidden)

@@ -10,9 +10,9 @@ import (
 // Stock model struct
 type Stock struct {
 	ID           uint      `json:"id"`
-	Ticker       string    `gorm:"unique;not null" json:"ticker"`
-	CompanyName  string    `gorm:"not null" json:"company_name"`
-	SellingPrice float64   `gorm:"not null" json:"selling_price"`
+	Ticker       string    `gorm:"unique;not null" json:"ticker" binding:"required"`
+	CompanyName  string    `gorm:"not null" json:"company_name" binding:"required"`
+	SellingPrice float64   `gorm:"not null" json:"selling_price" binding:"required"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 }
