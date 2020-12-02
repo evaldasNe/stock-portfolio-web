@@ -16,7 +16,7 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	r.Use(ginsession.New(), cors.Middleware(cors.Config{
+	r.Use(ginsession.New(), Middlewares.CorsMiddleware(), cors.Middleware(cors.Config{
 		Origins:         "*",
 		Methods:         "GET, PUT, PATCH, POST, DELETE",
 		RequestHeaders:  "*",
